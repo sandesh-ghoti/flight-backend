@@ -28,4 +28,68 @@ async function createAirplane(data) {
     );
   }
 }
-module.exports = { createAirplane };
+
+async function getAirplanes() {
+  try {
+    const airplanes = await airplaneRepository.getAll();
+    return airplanes;
+  } catch (error) {
+    throw new AppError(
+      "unable to fetch all airplanes",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
+async function getAirplane(id) {
+  try {
+    const airplanes = await airplaneRepository.get(id);
+    return airplanes;
+  } catch (error) {
+    if (error.statusCode === StatusCodes.NOT_FOUND) {
+      throw new AppError(`unable to fetch airplane ${id}`, error.statusCode);
+    }
+    throw new AppError(
+      `something went wrong`,
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
+async function destroyAirplane(id) {
+  try {
+    const airplanes = await airplaneRepository.destroy(id);
+    return airplanes;
+  } catch (error) {
+    if (error.statusCode === StatusCodes.NOT_FOUND) {
+      throw new AppError(`unable to fetch airplane ${id}`, error.statusCode);
+    }
+    throw new AppError(
+      `something went wrong`,
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
+async function updateAirplane(id) {
+  try {
+    const airplanes = await airplaneRepository.update(id, data);
+    return airplanes;
+  } catch (error) {
+    if (error.statusCode === StatusCodes.NOT_FOUND) {
+      throw new AppError(`unable to fetch airplane ${id}`, error.statusCode);
+    }
+    throw new AppError(
+      `something went wrong`,
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
+module.exports = {
+  createAirplane,
+  getAirplanes,
+  getAirplane,
+  destroyAirplane,
+  updateAirplane,
+};

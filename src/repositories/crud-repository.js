@@ -1,5 +1,6 @@
 const { Logger } = require("winston");
 const AppError = require("../utils/errors/appError");
+const { StatusCodes } = require("http-status-codes");
 
 class CrudRepository {
   constructor(model) {
@@ -10,47 +11,34 @@ class CrudRepository {
     return res;
   }
   async destroy(data) {
-    try {
-      const res = await this.model.destroy({
-        where: { id: data },
-      });
-      return res;
-    } catch (error) {
-      Logger.error("error in crud repo: destroy", error.message);
-      throw error;
+    const res = await this.model.destroy({
+      where: { id: data },
+    });
+    if (!res) {
+      throw new AppError(`unable to find the resource`, StatusCodes.NOT_FOUND);
     }
+    return res;
   }
   async get(data) {
-    try {
-      const res = await this.model.find({
-        where: { id: data },
-      });
-      return res;
-    } catch (error) {
-      Logger.error("error in crud repo: get", error.message);
-      throw error;
+    const res = await this.model.findByPk(data);
+    if (res === undefined || res === null) {
+      throw new AppError(`unable to find the resource`, StatusCodes.NOT_FOUND);
     }
+    return res;
   }
   async getAll() {
-    try {
-      const res = await this.model.findAll();
-      return res;
-    } catch (error) {
-      Logger.error("error in crud repo: getAll", error.message);
-      throw error;
-    }
+    const res = await this.model.findAll();
+    return res;
   }
   async update(id, data) {
     //data must be object
-    try {
-      const res = await this.model.update(data, {
-        where: { id: id },
-      });
-      return res;
-    } catch (error) {
-      Logger.error("error in crud repo: update", error.message);
-      throw error;
+    const res = await this.model.update(data, {
+      where: { id: id },
+    });
+    if (!res) {
+      throw new AppError(`unable to find the resource`, StatusCodes.NOT_FOUND);
     }
+    return res;
   }
 }
 module.exports = CrudRepository;
