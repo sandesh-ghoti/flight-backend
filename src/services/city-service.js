@@ -2,7 +2,6 @@ const { StatusCodes } = require("http-status-codes");
 const { CityRepository } = require("../repositories");
 const cityRepository = new CityRepository();
 const AppError = require("../utils/errors/appError");
-const { log } = require("winston");
 
 async function createCity(data) {
   try {
@@ -14,7 +13,11 @@ async function createCity(data) {
         ["unable to create city object"],
         StatusCodes.INTERNAL_SERVER_ERROR
       );
-    } else if ((error.name = "SequelizeValidationError")) {
+    } else if (
+      (error.name =
+        "SequelizeValidationError" ||
+        error.name == "SequelizeUniqueConstraintError")
+    ) {
       let explanation = [];
 
       error.errors.forEach((e) => {
