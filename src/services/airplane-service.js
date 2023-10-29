@@ -71,7 +71,7 @@ async function destroyAirplane(id) {
   }
 }
 
-async function updateAirplane(id) {
+async function updateAirplane(id, data) {
   try {
     const airplanes = await airplaneRepository.update(id, data);
     return airplanes;
