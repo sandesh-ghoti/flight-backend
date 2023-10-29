@@ -83,6 +83,18 @@ async function updateCity(id, data) {
   } catch (error) {
     if (error.statusCode === StatusCodes.NOT_FOUND) {
       throw new AppError("unabler to fetch city", error.statusCode);
+    } else if (
+      (error.name =
+        "SequelizeValidationError" ||
+        error.name == "SequelizeUniqueConstraintError")
+    ) {
+      let explanation = [];
+
+      error.errors.forEach((e) => {
+        explanation.push(e.message);
+      });
+
+      throw new AppError(explanation, StatusCodes.BAD_REQUEST);
     }
     throw new AppError(
       "something went wrong",

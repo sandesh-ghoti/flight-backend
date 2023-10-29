@@ -7,23 +7,27 @@ async function createAirplane(data) {
   try {
     const airplane = await airplaneRepository.create(data);
     return airplane;
-  } catch (error) {
-    if (error.name == "TypeError") {
+  } catch (e) {
+    if (e.name == "TypeError") {
       throw new AppError(
         ["unable to create airplane object"],
         StatusCodes.INTERNAL_SERVER_ERROR
       );
-    } else if ((error.name = "SequelizeValidationError")) {
+    } else if (
+      (e.name =
+        "SequelizeValidationError" ||
+        e.name == "SequelizeUniqueConstraintError")
+    ) {
       let explanation = [];
 
-      error.errors.forEach((e) => {
+      e.errors.forEach((e) => {
         explanation.push(e.message);
       });
 
       throw new AppError(explanation, StatusCodes.BAD_REQUEST);
     }
     throw new AppError(
-      "Cannot create a new Airplance object",
+      ["Cannot create a new airplane object"],
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
@@ -35,7 +39,7 @@ async function getAirplanes() {
     return airplanes;
   } catch (error) {
     throw new AppError(
-      "unable to fetch all airplanes",
+      ["unable to fetch all airplanes"],
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
@@ -47,10 +51,10 @@ async function getAirplane(id) {
     return airplanes;
   } catch (error) {
     if (error.statusCode === StatusCodes.NOT_FOUND) {
-      throw new AppError(`unable to fetch airplane ${id}`, error.statusCode);
+      throw new AppError([`unable to fetch airplane ${id}`], error.statusCode);
     }
     throw new AppError(
-      `something went wrong`,
+      ["Cannot fetch airplane object"],
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
@@ -62,10 +66,10 @@ async function destroyAirplane(id) {
     return airplanes;
   } catch (error) {
     if (error.statusCode === StatusCodes.NOT_FOUND) {
-      throw new AppError(`unable to fetch airplane ${id}`, error.statusCode);
+      throw new AppError([`unable to fetch airplane ${id}`], error.statusCode);
     }
     throw new AppError(
-      `something went wrong`,
+      ["Cannot destroy airport object"],
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
@@ -75,12 +79,27 @@ async function updateAirplane(id, data) {
   try {
     const airplanes = await airplaneRepository.update(id, data);
     return airplanes;
-  } catch (error) {
-    if (error.statusCode === StatusCodes.NOT_FOUND) {
-      throw new AppError(`unable to fetch airplane ${id}`, error.statusCode);
+  } catch (e) {
+    if (e.name == "TypeError") {
+      throw new AppError(
+        ["unable to update airplane object"],
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    } else if (
+      (e.name =
+        "SequelizeValidationError" ||
+        e.name == "SequelizeUniqueConstraintError")
+    ) {
+      let explanation = [];
+
+      e.errors.forEach((e) => {
+        explanation.push(e.message);
+      });
+
+      throw new AppError(explanation, StatusCodes.BAD_REQUEST);
     }
     throw new AppError(
-      `something went wrong`,
+      ["Cannot modify airplane object"],
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
