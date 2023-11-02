@@ -42,6 +42,17 @@ async function getAllFlight(req, res) {
     return res.status(error.statusCode).json(ErrorResponse);
   }
 }
+async function getFlights(req, res) {
+  try {
+    console.log("in the flight controller");
+    const flights = await FlightService.getFlights(req.query);
+    SuccessResponse.data = flights;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+}
 async function updateFlight(req, res) {
   try {
     const flight = await FlightService.updateFlight(req.params.id, {
@@ -76,6 +87,7 @@ module.exports = {
   createFlight,
   getFlight,
   getAllFlight,
+  getFlights,
   updateFlight,
   destroyFlight,
 };

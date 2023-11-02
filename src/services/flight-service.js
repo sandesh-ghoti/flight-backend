@@ -2,7 +2,7 @@ const { FlightRepository } = require("../repositories");
 const flightRepository = new FlightRepository();
 const { StatusCodes } = require("http-status-codes");
 const AppError = require("../utils/errors/appError");
-
+const { Op } = require("sequelize");
 async function createFlight(data) {
   try {
     const flight = await flightRepository.create(data);
@@ -65,7 +65,49 @@ async function getAllFlight() {
     );
   }
 }
-
+async function getFlights(query) {
+  try {
+    //trips=DEL-MUM&travellers=2&tripDate=2023-11-02&sort=price_DESC
+    //departureAirportId=DEL arrivalAirportId=MUM, departureTime=2023-11-02 order by price in desc
+    console.log("in the flight service");
+    const filter = {};
+    let sort = [];
+    const endingTripTime = "23:59:59";
+    if (query.trips) {
+      const [departureAirportId, arrivalAirportId] = query.trips.split("-");
+      filter.departureAirportId = departureAirportId;
+      filter.arrivalAirportId = arrivalAirportId;
+    }
+    if (query.price) {
+      const [minPrice, maxPrice] = query.price.split("-");
+      filter.price = { [Op.between]: [minPrice, maxPrice ? maxPrice : 10000] };
+    }
+    if (query.travellers) {
+      filter.totalSeats = {
+        [Op.gte]: query.travellers,
+      };
+    }
+    if (query.tripDate) {
+      filter.departureTime = {
+        [Op.between]: [query.tripDate, query.tripDate + " " + endingTripTime],
+      };
+    }
+    if (query.sort) {
+      const params = query.sort.split(",");
+      const sortFilters = params.map((param) => param.split("_"));
+      sort = sortFilters;
+    }
+    console.log(filter, sort);
+    const flights = await flightRepository.getFlights(filter, sort);
+    return flights;
+  } catch (e) {
+    console.log(e);
+    throw new AppError(
+      ["Cannot fetch flights object"],
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
 async function destroyFlight(id) {
   try {
     const flight = await flightRepository.destroy(id);
@@ -123,6 +165,7 @@ module.exports = {
   createFlight,
   getFlight,
   getAllFlight,
+  getFlights,
   updateFlight,
   destroyFlight,
 };

@@ -4,6 +4,8 @@ const { FlightController } = require("../../controllers");
 
 //POST api/v1/flight
 router.post("/", validateFlightCreateRequest, FlightController.createFlight);
+//POST api/v1/flight/search
+router.get("/search", FlightController.getFlights);
 //GET api/v1/flight/:id
 router.get("/:id", FlightController.getFlight);
 //GET api/v1/flight
