@@ -26,14 +26,6 @@ async function createAirport(data) {
         e.name == "SequelizeUniqueConstraintError")
     ) {
       let explanation = [];
-
-      e.errors.forEach((e) => {
-        explanation.push(e.message);
-      });
-
-      throw new AppError(explanation, StatusCodes.BAD_REQUEST);
-    } else if (e.name == "SequelizeUniqueConstraintError") {
-      let explanation = [];
       e.errors.forEach((e) => {
         explanation.push(e.message);
       });
@@ -90,7 +82,9 @@ async function updateAirport(id, data) {
     const airport = await airportRepository.update(id, data);
     return airport;
   } catch (e) {
-    if (e.name == "TypeError") {
+    if (e.statusCode === StatusCodes.NOT_FOUND) {
+      throw new AppError(["airport not found"], e.statusCode);
+    } else if (e.name == "TypeError") {
       throw new AppError(
         ["unable to update airport object"],
         StatusCodes.INTERNAL_SERVER_ERROR
@@ -107,13 +101,6 @@ async function updateAirport(id, data) {
     ) {
       let explanation = [];
 
-      e.errors.forEach((e) => {
-        explanation.push(e.message);
-      });
-
-      throw new AppError(explanation, StatusCodes.BAD_REQUEST);
-    } else if (e.name == "SequelizeUniqueConstraintError") {
-      let explanation = [];
       e.errors.forEach((e) => {
         explanation.push(e.message);
       });

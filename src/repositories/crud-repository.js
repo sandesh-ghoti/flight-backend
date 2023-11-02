@@ -35,7 +35,7 @@ class CrudRepository {
     const res = await this.model.update(data, {
       where: { id: id },
     });
-    if (!res) {
+    if (!res[0]) {
       throw new AppError(`unable to find the resource`, StatusCodes.NOT_FOUND);
     }
     return res;

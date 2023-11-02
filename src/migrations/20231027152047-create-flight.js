@@ -49,7 +49,7 @@ module.exports = {
         allowNull: false,
       },
       boardingGate: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       price: {
         type: Sequelize.INTEGER,
