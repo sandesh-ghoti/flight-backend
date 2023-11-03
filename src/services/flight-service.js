@@ -69,7 +69,6 @@ async function getFlights(query) {
   try {
     //trips=DEL-MUM&travellers=2&tripDate=2023-11-02&sort=price_DESC
     //departureAirportId=DEL arrivalAirportId=MUM, departureTime=2023-11-02 order by price in desc
-    console.log("in the flight service");
     const filter = {};
     let sort = [];
     const endingTripTime = "23:59:59";

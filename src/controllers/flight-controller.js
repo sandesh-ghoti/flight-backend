@@ -44,7 +44,6 @@ async function getAllFlight(req, res) {
 }
 async function getFlights(req, res) {
   try {
-    console.log("in the flight controller");
     const flights = await FlightService.getFlights(req.query);
     SuccessResponse.data = flights;
     return res.status(StatusCodes.OK).json(SuccessResponse);
