@@ -1,6 +1,6 @@
 "use strict";
 const { SeatType } = require("../utils/common");
-const { BUSSINESS, ECONOMY, PRIMIUMECONOMY, FIRSTCLASS } = seatType;
+const { BUSSINESS, ECONOMY, PRIMIUMECONOMY, FIRSTCLASS } = SeatType;
 const { Model } = require("sequelize");
 const seatType = require("../utils/common/seatTypeEnum");
 module.exports = (sequelize, DataTypes) => {
