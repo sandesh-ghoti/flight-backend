@@ -1,6 +1,10 @@
 const CrudRepository = require("./crud-repository");
 const { Sequelize } = require("sequelize");
 const { Flight, Airplane, Airport, City } = require("../models");
+const AppError = require("../utils/errors/appError");
+const { StatusCodes } = require("http-status-codes");
+const db = require("../models");
+const { addRowLevelLocking } = require("./customQueries");
 class FlightRepository extends CrudRepository {
   constructor() {
     super(Flight);
@@ -52,6 +56,29 @@ class FlightRepository extends CrudRepository {
       ],
     });
     return flights;
+  }
+  async updateRemainingSeats(flightId, data) {
+    /***
+     * parameter @data.dec must be true or false */
+    try {
+      await db.sequelize.query(addRowLevelLocking(flightId));
+      const res = await Flight.findByPk(flightId);
+      // increament
+      if (res === undefined || res === null) {
+        throw new AppError(
+          `unable to find the flight in flight repo`,
+          StatusCodes.NOT_FOUND
+        );
+      }
+      if (Boolean(data.dec)) {
+        await res.decrement("totalSeats", { by: data.noOfSeats });
+      } else {
+        await res.increment("totalSeats", { by: data.noOfSeats });
+      }
+      return res;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 module.exports = FlightRepository;

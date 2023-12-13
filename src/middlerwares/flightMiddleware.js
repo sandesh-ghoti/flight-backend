@@ -95,4 +95,24 @@ const validateCreateRequest = (req, res, next) => {
   }
   next();
 };
-module.exports = validateCreateRequest;
+
+async function updateSeatMiddleware(req, res, next) {
+  if (req.body.dec === undefined) {
+    ErrorResponse.message = "Something went wrong while updating flight seats";
+    ErrorResponse.error = new AppError(
+      ["dec not found"],
+      StatusCodes.BAD_REQUEST
+    );
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+  if (req.body.noOfSeats === undefined) {
+    ErrorResponse.message = "Something went wrong while updating flight seats";
+    ErrorResponse.error = new AppError(
+      ["noOfSeats not found"],
+      StatusCodes.BAD_REQUEST
+    );
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+  next();
+}
+module.exports = { validateCreateRequest, updateSeatMiddleware };

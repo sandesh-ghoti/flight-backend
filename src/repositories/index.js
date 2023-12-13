@@ -4,4 +4,5 @@ module.exports = {
   CrudRepository: require("./crud-repository"),
   CityRepository: require("./city-repository"),
   FlightRepository: require("./flight-repository"),
+  CustomQueries: require("./customQueries"),
 };
