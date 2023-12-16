@@ -14,9 +14,8 @@ async function createAirplane(data) {
         StatusCodes.INTERNAL_SERVER_ERROR
       );
     } else if (
-      (e.name =
-        "SequelizeValidationError" ||
-        e.name == "SequelizeUniqueConstraintError")
+      e.name == "SequelizeValidationError" ||
+      e.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
 
@@ -86,9 +85,8 @@ async function updateAirplane(id, data) {
         StatusCodes.INTERNAL_SERVER_ERROR
       );
     } else if (
-      (e.name =
-        "SequelizeValidationError" ||
-        e.name == "SequelizeUniqueConstraintError")
+      e.name == "SequelizeValidationError" ||
+      e.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
 

@@ -9,15 +9,14 @@ async function createFlight(data) {
     return flight;
   } catch (e) {
     console.log(e);
-    if ((e.name = "TypeError")) {
+    if (e.name == "TypeError") {
       throw new AppError(
         ["unable to create flight object"],
         StatusCodes.INTERNAL_SERVER_ERROR
       );
     } else if (
-      (e.name =
-        "SequelizeValidationError" ||
-        e.name == "SequelizeUniqueConstraintError")
+      e.name == "SequelizeValidationError" ||
+      e.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
       e.errors.forEach((e) => {
@@ -142,9 +141,8 @@ async function updateFlight(id, data) {
         StatusCodes.BAD_REQUEST
       );
     } else if (
-      (e.name =
-        "SequelizeValidationError" ||
-        e.name == "SequelizeUniqueConstraintError")
+      e.name == "SequelizeValidationError" ||
+      e.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
       e.errors.forEach((e) => {
@@ -182,9 +180,8 @@ async function updateSeats(flightId, data) {
         StatusCodes.BAD_REQUEST
       );
     } else if (
-      (e.name =
-        "SequelizeValidationError" ||
-        e.name == "SequelizeUniqueConstraintError")
+      e.name == "SequelizeValidationError" ||
+      e.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
       e.errors.forEach((e) => {

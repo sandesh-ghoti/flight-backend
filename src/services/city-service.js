@@ -14,9 +14,8 @@ async function createCity(data) {
         StatusCodes.INTERNAL_SERVER_ERROR
       );
     } else if (
-      (error.name =
-        "SequelizeValidationError" ||
-        error.name == "SequelizeUniqueConstraintError")
+      error.name == "SequelizeValidationError" ||
+      error.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
 
@@ -84,9 +83,8 @@ async function updateCity(id, data) {
     if (error.statusCode === StatusCodes.NOT_FOUND) {
       throw new AppError("unabler to fetch city", error.statusCode);
     } else if (
-      (error.name =
-        "SequelizeValidationError" ||
-        error.name == "SequelizeUniqueConstraintError")
+      error.name == "SequelizeValidationError" ||
+      error.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
 

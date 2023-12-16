@@ -21,9 +21,8 @@ async function createAirport(data) {
         StatusCodes.BAD_REQUEST
       );
     } else if (
-      (e.name =
-        "SequelizeValidationError" ||
-        e.name == "SequelizeUniqueConstraintError")
+      e.name == "SequelizeValidationError" ||
+      e.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
       e.errors.forEach((e) => {
@@ -95,9 +94,8 @@ async function updateAirport(id, data) {
         StatusCodes.BAD_REQUEST
       );
     } else if (
-      (e.name =
-        "SequelizeValidationError" ||
-        e.name == "SequelizeUniqueConstraintError")
+      e.name == "SequelizeValidationError" ||
+      e.name == "SequelizeUniqueConstraintError"
     ) {
       let explanation = [];
 
