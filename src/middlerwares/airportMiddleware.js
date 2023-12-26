@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const { ErrorResponse } = require("../utils/common");
-
+const AppError = require("../utils/errors/appError");
 const validateCreateRequest = (req, res, next) => {
   if (req.body.name === undefined || req.body.name === null) {
     ErrorResponse.message = "Something went wrong while creating airport";
