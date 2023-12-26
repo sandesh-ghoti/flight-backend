@@ -6,6 +6,12 @@ Lets take a look inside the `src` folder
 
 - `config` -> In this folder anything and everything regarding any configurations or setup of a library or module will be done. For example: setting up `dotenv` so that we can use the environment variables anywhere in a cleaner fashion, this is done in the `server-config.js`. One more example can be to setup you logging library that can help you to prepare meaningful logs, so configuration for this library should also be done here.
 
+  - #### create .env file for required variable in serverConfig.js file
+
+  ```
+  PORT=3001
+  ```
+
 - `routes` -> In the routes folder, we register a route and the corresponding middleware and controllers to it.
 
 - `middlewares` -> they are just going to intercept the incoming requests where we can write our validators, authenticators etc.
