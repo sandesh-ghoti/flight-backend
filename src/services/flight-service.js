@@ -27,7 +27,7 @@ async function createFlight(data) {
       console.log(e);
       throw new AppError(
         [
-          "ForeignKey Constraint Error please provide valid ${add here which foregin key has error}",
+          `ForeignKey Constraint Error please provide valid. ${e.sqlMessage}`,
         ],
         StatusCodes.BAD_REQUEST
       );
