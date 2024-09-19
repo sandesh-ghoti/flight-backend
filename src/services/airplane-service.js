@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const { AirplaneRepository } = require("../repositories");
 const airplaneRepository = new AirplaneRepository();
 const AppError = require("../utils/errors/appError");
-
+const { Logger } = require('../config')
 async function createAirplane(data) {
   try {
     const airplane = await airplaneRepository.create(data);
@@ -67,8 +67,16 @@ async function destroyAirplane(id) {
     if (error.statusCode === StatusCodes.NOT_FOUND) {
       throw new AppError([`unable to fetch airplane ${id}`], error.statusCode);
     }
+    else if(error.name==="SequelizeForeignKeyConstraintError"){
+      throw new AppError(
+        ["SequelizeForeignKeyConstraintError","Cannot destroy airplane object first please destroy all seats of this airplane", ],
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+    Logger.info(`error while destroying airplane\n Name:${error.name}`);
+    console.log(`error while destroying airplane\n`,error);
     throw new AppError(
-      ["Cannot destroy airport object"],
+      ["Cannot destroy airplane object"],
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
