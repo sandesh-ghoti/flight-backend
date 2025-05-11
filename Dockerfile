@@ -1,4 +1,4 @@
-FROM node
+FROM node:23.11.0-bookworm-slim
 WORKDIR /development/nodejs/flight-service
 
 COPY package.json .
